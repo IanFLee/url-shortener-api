@@ -4,7 +4,8 @@
     "express": "^4.16.2",
     "os": "*",
     "request-ip": "*",
-    "ip": "*"
+    "ip": "*",
+    "express-useragent": "*"
   },
   "main": "server.js",
   "scripts": {

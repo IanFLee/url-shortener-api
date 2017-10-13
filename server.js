@@ -11,6 +11,7 @@ var express = require('express');
 const os = require('os');
 const requestIP = require('request-ip');
 const ip = require('ip');
+const useragent = require('express-useragent');
 
 var app = express();
 
@@ -36,9 +37,18 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use(function(req, res){
-  var x = (process.platform);;
-  res.send(x);
+app.use(useragent.express());
+app.use(function(req, res, next){
+  res.locals.os = req.useragent.os;
+  next();
+})
+
+app.use(function(req, res) {
+  var languages = req.headers["accept-language"];
+  var languagesArray = languages.split(',');
+  var primaryLanguage = languagesArray[0];
+  var rhpObj = {"ip" : res.locals.ip, "os" : res.locals.os, "language" : primaryLanguage};
+  res.json(rhpObj);
 })
 
 // middleware ??
