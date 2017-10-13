@@ -5,10 +5,15 @@
 
 'use strict';
 
+// call packages
 var fs = require('fs');
 var express = require('express');
-var http = require('http');
+const os = require('os');
+const requestIP = require('request-ip');
+const ip = require('ip');
+
 var app = express();
+
 
 if (!process.env.DISABLE_XORIGIN) {
   app.use(function(req, res, next) {
@@ -23,10 +28,20 @@ if (!process.env.DISABLE_XORIGIN) {
   });
 }
 
-http.createServer(function(req, res) {
-  console.log('a');
+const requestIp = require('request-ip');
+app.use(requestIp.mw())
+ 
+app.use(function(req, res, next) {
+  res.locals.ip = req.clientIp;
+    next();
 });
 
+app.use(function(req, res){
+  var x = (process.platform);;
+  res.send(x);
+})
+
+// middleware ??
 app.use('/public', express.static(process.cwd() + '/public'));
 
 app.route('/_api/package.json')
