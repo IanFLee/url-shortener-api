@@ -2,10 +2,10 @@
   "name": "fcc-learn-npm-package-json",
   "dependencies": {
     "express": "^4.16.2",
-    "os": "*",
-    "request-ip": "*",
-    "ip": "*",
-    "express-useragent": "*"
+    "os": "0.1.1",
+    "request-ip": "2.0.2",
+    "ip": "1.1.5",
+    "express-useragent": "1.0.8"
   },
   "main": "server.js",
   "scripts": {
