@@ -26,19 +26,22 @@ if (!process.env.DISABLE_XORIGIN) {
   });
 }
 
-var mongoClient = mongodb.MongoClient;
-var mLabUsername = process.env.M_LAB_USERNAME;
-var mLabPassword = process.env.M_LAB_PASSWORD;
+var MongoClient = mongodb.MongoClient;
 
-var url = 'mongodb://'+mLabUsername+':'+mLabPassword+'@ds153113.mlab.com:53113/url-shortener'
+var url = process.env.URL;
 
 // middleware ??
 app.use('/public', express.static(process.cwd() + '/public'));
 
-mongoClient.connect(url, function(err, db){
+MongoClient.connect(url, function(err, db){
   if (err) {console.log('unable to. error is '+err)}
   else {
     console.log('connected to '+url);
+    var collection = db.createCollection('shorts', function(err, collection){
+      return collection;
+    });
+
+    collection.insert({"number" : 1, "letter" : "a"});
     
     db.close();
   }
