@@ -41,7 +41,7 @@ MongoClient.connect(url, function(err, db){
       return collection;
     });
 
-    collection.insert({"number" : 1, "letter" : "a"});
+    db.collection.insert({"number" : 1, "letter" : "a"});
     
     db.close();
   }
