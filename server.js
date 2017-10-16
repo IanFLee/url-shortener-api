@@ -37,15 +37,22 @@ MongoClient.connect(url, function(err, db){
   if (err) {console.log('unable to. error is '+err)}
   else {
     console.log('connected to '+url);
-    var collection = db.createCollection('shorts', function(err, collection){
-      return collection;
-    });
+    var collection = db.createCollection('url-shortener');
+    var doc1 = {'hello':'doc1'};
+    var doc2 = {'hello':'doc2'};
+    var lotsOfDocs =[{'hello': 'doc3'}, {'hello':'doc4'}];
+    collection.insert(doc1);
+    collection.insert(doc2, {'w':1}, function(err, result){});
+    collection.insert(lotsOfDocs, {w:1}, function(err, result){});
+    console.log('finshed insert');
+    }
 
-    db.collection.insert({"number" : 1, "letter" : "a"});
+
+    
     
     db.close();
   }
-})
+);
 
 app.route('/_api/package.json')
   .get(function(req, res, next) {
