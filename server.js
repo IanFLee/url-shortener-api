@@ -29,6 +29,7 @@ if (!process.env.DISABLE_XORIGIN) {
 var MongoClient = mongodb.MongoClient;
 
 var url = process.env.URL;
+var x;
 
 // middleware ??
 app.use('/public', express.static(process.cwd() + '/public'));
@@ -37,7 +38,8 @@ MongoClient.connect(url, function(err, db){
   if (err) {console.log('unable to. error is '+err)}
   else {
     console.log('connected to '+url);
-    var collection = db.createCollection('url-shortener');
+    var collection = db.collection('url-shortener');
+    x = collection;
     var doc1 = {'hello':'doc1'};
     var doc2 = {'hello':'doc2'};
     var lotsOfDocs =[{'hello': 'doc3'}, {'hello':'doc4'}];
@@ -45,14 +47,19 @@ MongoClient.connect(url, function(err, db){
     collection.insert(doc2, {'w':1}, function(err, result){});
     collection.insert(lotsOfDocs, {w:1}, function(err, result){});
     console.log('finshed insert');
+    x = doc2;
     }
-
-
     
+     
+     
     
     db.close();
   }
 );
+
+app.get("/", function(req, res){
+  res.send(x);
+})
 
 app.route('/_api/package.json')
   .get(function(req, res, next) {
