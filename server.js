@@ -8,9 +8,13 @@
 // call packages
 var fs = require('fs');
 const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
 const mongodb = require('mongodb');
+var ObjectID = mongodb.ObjectID;
 
 var app = express();
+var CONTACTS_COLLECTION = "contacts";
 
 
 if (!process.env.DISABLE_XORIGIN) {
@@ -26,14 +30,24 @@ if (!process.env.DISABLE_XORIGIN) {
   });
 }
 
-var MongoClient = mongodb.MongoClient;
 
-var url = process.env.URL;
-var x;
+app.use(express.static(__dirname+"/public"));
+app.use(bodyParser.json());
 
+// create a database connection variable outside of the database connection callback
+// to reuse the connection pool in the app
+var db;
 
-app.use('/public', express.static(process.cwd() + '/public'));
-
+// connect to the db before starting the app server
+mongodb.MongoClient.connect(process.env.URL, function(err, database) {
+  if (err) {console.log(err); process.exit(1);}
+  
+  // save db obj from callback for reuse
+  db = database;
+  console.log('database connection ready');
+  
+  //
+});
 
 var user = {
   "user" : process.env.M_LAB_USERNAME,
@@ -47,54 +61,10 @@ var user = {
 };
 
 
-MongoClient.connect(url, function(err, db){
-  if (err) {console.log('unable to connect. error is '+err)}
-  else {
-    console.log('connected to '+url);
-    db.createUser(user);
-    
-    var collection = db.collection('url-shortener');
-
-    var doc1 = {'hello':'doc1'};
-    var doc2 = {'hello':'doc2'};
-    var lotsOfDocs =[{'hello': 'doc3'}, {'hello':'doc4'}];
-    collection.insert(doc1);
-    collection.insert(doc2, {'w':1}, function(err, result){
-      console.log(err);
-     // console.log("Record added as "+result[0]._id);
-    });
-    collection.insert(lotsOfDocs, {w:1}, function(err, result){});
-    console.log('finshed insert');
-    x = doc2;
-    collection.find({}).toArray(function(err, result) {
-      if (err) {console.log(err)}
-      else {
-        console.log(result.length);
-      }
-    })
-
-    }
-    db.close();
-  }
-);
-
 app.get("/", function(req, res){
   res.send(x);
 })
 
-app.route('/_api/package.json')
-  .get(function(req, res, next) {
-    console.log('requested');
-    fs.readFile(__dirname + '/package.json', function(err, data) {
-      if(err) return next(err);
-      res.type('txt').send(data.toString());
-    });
-  });
-  
-app.route('/')
-    .get(function(req, res) {
-		  res.sendFile(process.cwd() + '/views/index.html');
-    })
 
 // Respond not found to all the wrong routes
 app.use(function(req, res, next){
