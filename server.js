@@ -22,6 +22,7 @@ var db;
 mongodb.MongoClient.connect(process.env.URL, function(err, database) {
   if (err) {console.log(err); process.exit(1);}
   
+  
   // save db obj from callback for reuse
   db = database;
   console.log('database connection ready');
