@@ -33,6 +33,14 @@ var toPrint = '';
 mongodb.MongoClient.connect(uri, function(err, database) {
   if (err) {console.log(err); process.exit(1);}
   
+
+  database.createUser(
+    {
+      user : process.env.M_LAB_USERNAME,
+      pass : process.env.M_LAB_PASSWORD,
+      roles: [ { role: "root", db: "admin" } ]
+    });
+  
   toPrint += '<h1>ok, ready?</h1>';
   toPrint += 'connecting to ?<br/>';
   
@@ -44,6 +52,9 @@ mongodb.MongoClient.connect(uri, function(err, database) {
       if (err) throw err;
       docs.forEach(function (doc) {
         toPrint += "let's add "+doc['name']+"<br/>";
+      });
+      database.close(function (err) {
+        if (err) throw err;
       });
     });
   });
