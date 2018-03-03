@@ -22,6 +22,7 @@ var dogData = [
 
 
 app.use(express.static("public"));
+
 var uri = process.env.URL;
 var toPrint = '';
 
@@ -68,7 +69,11 @@ var user = {
   ]
 };
 
+app.get('/', function(req, res) {
+  res.send(toPrint);
+});
 
-app.listen(process.env.PORT, function () {
+
+app.listen("3000", function () {
   console.log('Node.js listening ...');
 });
