@@ -48,8 +48,12 @@ mongodb.MongoClient.connect(uri, function(err, database) {
   if (err) {console.log(err); process.exit(1);}
   
   var urls = database.collection('urls');
-console.log(shortURLObj);
+
+  app.listen("3000", function () {
+  console.log('Node.js listening ...');
+});
   urls.insert(shortURLObj, function(err, results) {
+    console.log(shortURLObj);
     if (err) throw err;
     database.close(function (err) {
       if (err) throw err;
@@ -62,6 +66,4 @@ console.log(shortURLObj);
 });
 
 
-app.listen("3000", function () {
-  console.log('Node.js listening ...');
-});
+
