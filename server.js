@@ -49,7 +49,8 @@ app.get('/new/:url', function(req, res) {
 });
 
 app.get('/:short', function(req, res) {
-  res.send('you entered '+req.params.short);
+  var urls = db.collection('urls');
+  res.send('you entered '+db.find({ short : req.params.short }).input);
 });
 
 app.use(express.static("public"));
