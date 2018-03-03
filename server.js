@@ -26,7 +26,7 @@ app.get('/new/https://:url', function(req, res) {
   toPrint += '<h1>ok, ready?</h1>';
   toPrint += 'connecting to '+paramURL+'<br/>';
   var urls = db.collection('urls');
-  console.log(req.params.url);
+  console.log('user entered '+paramURL);
   function getShortRandom() {
     var full = "";
     for (let i = 0; i < 4; i++) {
@@ -38,12 +38,13 @@ app.get('/new/https://:url', function(req, res) {
     input : paramURL,
     short : getShortRandom()
   };
-  toPrint += '<h3>input: '+shortURLObj.input+'<br/>'+'short: <a href="asparism-url-shortener-microservice.glitch.me/'+shortURLObj.short+'">asparism-url-shortener-microservice.glitch.me/'+shortURLObj.short+'</a></h3>';
+  toPrint += '<h3>input: '+shortURLObj.input+'<br/>'+'short: <a href="https://asparism-url-shortener-microservice.glitch.me/'+shortURLObj.short+'">asparism-url-shortener-microservice.glitch.me/'+shortURLObj.short+'</a></h3>';
   
   urls.insert(shortURLObj, function(err, results) {
     if (err) throw err;
     // DROP ALL TEST DATA WHEN YOU'RE FINISHED 
     // urls.drop something somethign
+    console.log('inserted '+shortURLObj.short);
     db.close(function (err) {
       if (err) throw err;
     });
@@ -54,10 +55,14 @@ app.get('/new/https://:url', function(req, res) {
 
 app.get('/:short', function(req, res, next) {
   var urls = db.collection('urls');
-  urls.find({ short : req.params.short }, { id : 0, input : 1 }).toArray(function (err, result) {
+  urls.find({ short : req.params.short }, { input : 1 }).toArray(function (err, result) {
     var originalURL = result[0].input;
-    res.redirect('https://'+originalURL);
-    ret
+    console.log('getting ready to redirect to :'+originalURL);
+    //res.redirect(301, 'https://'+originalURL);
+    res.redirect('https://google.com');
+    db.close(function (err) {
+      if (err) throw err;
+    });
   });
 });
 
