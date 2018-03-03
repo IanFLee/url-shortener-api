@@ -10,17 +10,18 @@ var ObjectID = mongodb.ObjectID;
 var app = express();
 
 var paramURL;
+var uri = process.env.URL;
+var toPrint = '';
 
 app.get('/new/:url', function(req, res) {
   paramURL = req.params.url;
-  connect();
+  toPrint += '<h1>ok, ready?</h1>';
+  toPrint += 'connecting to '+paramURL+'<br/>';
   res.send(toPrint);
 });
 
 app.use(express.static("public"));
 
-var uri = process.env.URL;
-var toPrint = '';
 
 // create a database connection variable outside of the database connection callback
 // to reuse the connection pool in the app
@@ -42,14 +43,9 @@ var shortURLObj = {
 // {INPUT : paramUrl, SHORT : RANDOM 4 DIGIT}
 // INSERT IT
 
-function connect() {
 // connect to the db before starting the app server
 mongodb.MongoClient.connect(uri, function(err, database) {
   if (err) {console.log(err); process.exit(1);}
-  
-  
-  toPrint += '<h1>ok, ready?</h1>';
-  toPrint += 'connecting to '+shortURLObj.input+'<br/>';
   
   var urls = database.collection('urls');
 
@@ -65,7 +61,6 @@ mongodb.MongoClient.connect(uri, function(err, database) {
   console.log('database connection ready ');
 });
 
-}
 
 app.listen("3000", function () {
   console.log('Node.js listening ...');
