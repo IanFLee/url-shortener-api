@@ -44,9 +44,9 @@ app.get('/new/:url', function(req, res) {
   res.send(toPrint);
 });
 
-app.get('/:short', function(req, res) {
-  if (req.params.short) {
-    res.send('you entered '+req.params.short);
+app.get('/*', function(req, res) {
+  if (req.params.length) {
+    res.send('you entered '+req.params.length);
   } else {
     res.send('welcome home');
   }
