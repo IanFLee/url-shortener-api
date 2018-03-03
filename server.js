@@ -26,7 +26,6 @@ app.get('/new/:url', function(req, res) {
     }
     return full;
   }
-
   var shortURLObj = {
     input : paramURL,
     short : getShortRandom()
@@ -35,12 +34,22 @@ app.get('/new/:url', function(req, res) {
   
   urls.insert(shortURLObj, function(err, results) {
     if (err) throw err;
+    // DROP ALL TEST DATA WHEN YOU'RE FINISHED 
+    // urls.drop something somethign
     db.close(function (err) {
       if (err) throw err;
     });
   });
   
   res.send(toPrint);
+});
+
+app.get('/:short', function(req, res) {
+  if (req.params.short) {
+    res.send('you entered '+req.params.short);
+  } else {
+    res.send('welcome home');
+  }
 });
 
 app.use(express.static("public"));
