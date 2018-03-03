@@ -8,18 +8,17 @@ const mongodb = require('mongodb');
 var ObjectID = mongodb.ObjectID;
 
 var app = express();
-var CONTACTS_COLLECTION = "contacts";
 
 
-app.use(express.static(__dirname+"/public"));
-app.use(bodyParser.json());
+app.use(express.static("public"));
+var uri = process.env.URL;
 
 // create a database connection variable outside of the database connection callback
 // to reuse the connection pool in the app
 var db;
 
 // connect to the db before starting the app server
-mongodb.MongoClient.connect(process.env.URL, function(err, database) {
+mongodb.MongoClient.connect(uri, function(err, database) {
   if (err) {console.log(err); process.exit(1);}
   
   
