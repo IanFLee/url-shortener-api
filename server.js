@@ -9,11 +9,16 @@ var ObjectID = mongodb.ObjectID;
 
 var app = express();
 
-var dogData = 
+var dogData = [
   {
-  name : 'harley',
-  age  : 'old'
+    name : 'harley',
+    age  : 'old'
+  },
+  {
+    name : 'ivy',
+    age  : 'young'
   }
+];
 
 
 app.use(express.static("public"));
@@ -22,19 +27,29 @@ var toPrint = '';
 
 // create a database connection variable outside of the database connection callback
 // to reuse the connection pool in the app
-var db;
+// var db;
 
 // connect to the db before starting the app server
 mongodb.MongoClient.connect(uri, function(err, database) {
   if (err) {console.log(err); process.exit(1);}
   
   toPrint += '<h1>ok, ready?</h1>';
-  toPrint += 'connecting to ?';
+  toPrint += 'connecting to ?<br/>';
   
-  var dogs = '';
+  var dogs = database.collection('urls');
+  
+  dogs.insert(dogData, function(err, results) {
+    if (err) throw err;
+    dogs.find({name : 'harley'}, function(err, docs) {
+      if (err) throw err;
+      docs.forEach(function (doc) {
+        toPrint += "let's add "+doc['name']+"<br/>";
+      });
+    });
+  });
   
   // save db obj from callback for reuse
-  db = database;
+ //  db = database;
   console.log('database connection ready');
 });
 
