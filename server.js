@@ -17,12 +17,16 @@ app.get('/', function(req, res) {
   res.send('welcome home');
 });
 
-app.get('/new/:url', function(req, res) {
+app.get('/new/:incorrect', function(req, res) {
+  res.send('incorrect url format. prefix with https://');
+});
+
+app.get('/new/https://:url', function(req, res) {
   paramURL = req.params.url;
   toPrint += '<h1>ok, ready?</h1>';
   toPrint += 'connecting to '+paramURL+'<br/>';
   var urls = db.collection('urls');
-  
+  console.log(req.params.url);
   function getShortRandom() {
     var full = "";
     for (let i = 0; i < 4; i++) {
@@ -48,12 +52,13 @@ app.get('/new/:url', function(req, res) {
   res.send(toPrint);
 });
 
-app.get('/:short', function(req, res) {
+app.get('/:short', function(req, res, next) {
   var urls = db.collection('urls');
   urls.find({ short : req.params.short }, { input : 1 }).toArray(function (err, result) {
     console.log(result);
     var short = result[0].input;
-    res.status(301).redirect(short)
+    res.status(301).redirect('https://'+short);
+    next();
   });
 });
 
