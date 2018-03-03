@@ -69,8 +69,8 @@ var user = {
   ]
 };
 
-app.get('/', function(req, res) {
-  res.send(toPrint);
+app.get('/:url', function(req, res) {
+  res.send(toPrint+req.params.url);
 });
 
 
