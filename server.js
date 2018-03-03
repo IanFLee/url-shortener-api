@@ -9,9 +9,16 @@ var ObjectID = mongodb.ObjectID;
 
 var app = express();
 
+var dogData = 
+  {
+  name : 'harley',
+  age  : 'old'
+  }
+
 
 app.use(express.static("public"));
 var uri = process.env.URL;
+var toPrint = '';
 
 // create a database connection variable outside of the database connection callback
 // to reuse the connection pool in the app
@@ -21,16 +28,14 @@ var db;
 mongodb.MongoClient.connect(uri, function(err, database) {
   if (err) {console.log(err); process.exit(1);}
   
+  toPrint += '<h1>ok, ready?</h1>';
+  toPrint += 'connecting to ?';
+  
+  var dogs = '';
   
   // save db obj from callback for reuse
   db = database;
   console.log('database connection ready');
-  
-  // Initialize the app.
-  var server = app.listen(process.env.PORT || 8080, function () {
-    var port = server.address().port;
-    console.log("App now running on port", port);
-  });
 });
 
 var user = {
@@ -48,4 +53,3 @@ var user = {
 app.listen(process.env.PORT, function () {
   console.log('Node.js listening ...');
 });
-
