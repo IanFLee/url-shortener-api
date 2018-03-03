@@ -11,8 +11,10 @@ var app = express();
 
 var paramURL;
 
-app.get('/:url', function(req, res) {
+app.get('/new/:url', function(req, res) {
   paramURL = req.params.url;
+  connect();
+  res.send(toPrint);
 });
 
 app.use(express.static("public"));
@@ -31,44 +33,39 @@ function getShortRandom() {
   }
 }
 
-var 
+var shortURLObj = {
+  input : paramURL,
+  short : getShortRandom()
+};
 
 // MATH.RANDOM TO GET SHORTENED URL
 // {INPUT : paramUrl, SHORT : RANDOM 4 DIGIT}
 // INSERT IT
 
+function connect() {
 // connect to the db before starting the app server
 mongodb.MongoClient.connect(uri, function(err, database) {
   if (err) {console.log(err); process.exit(1);}
   
   
   toPrint += '<h1>ok, ready?</h1>';
-  toPrint += 'connecting to '+paramURL+'<br/>';
+  toPrint += 'connecting to '+shortURLObj.input+'<br/>';
   
-  var dogs = database.collection('urls');
+  var urls = database.collection('urls');
 
-  dogs.insert(dogData, function(err, results) {
+  urls.insert(shortURLObj, function(err, results) {
     if (err) throw err;
-    dogs.find({name : 'harley'}, function(err, docs) {
+    database.close(function (err) {
       if (err) throw err;
-      docs.forEach(function (doc) {
-        toPrint += "let's add "+doc['name']+"<br/>";
-      });
-      dogs.drop(function (err) {
-        if (err) throw err;
-        database.close(function (err) {
-          if (err) throw err;
-        });
-      });
-      
     });
   });
 
   // save db obj from callback for reuse
  //  db = database;
-  console.log('database connection ready');
+  console.log('database connection ready ');
 });
 
+}
 
 app.listen("3000", function () {
   console.log('Node.js listening ...');
