@@ -9,17 +9,11 @@ var ObjectID = mongodb.ObjectID;
 
 var app = express();
 
-var dogData = [
-  {
-    name : 'harley',
-    age  : 'old'
-  },
-  {
-    name : 'ivy',
-    age  : 'young'
-  }
-];
+var paramURL;
 
+app.get('/:url', function(req, res) {
+  paramURL = req.params.url;
+});
 
 app.use(express.static("public"));
 
@@ -30,16 +24,29 @@ var toPrint = '';
 // to reuse the connection pool in the app
 // var db;
 
+function getShortRandom() {
+  var full = "";
+  for (let i = 0; i < 4; i++) {
+    full += Math.floor(Math.random() * Math.floor(10));
+  }
+}
+
+var 
+
+// MATH.RANDOM TO GET SHORTENED URL
+// {INPUT : paramUrl, SHORT : RANDOM 4 DIGIT}
+// INSERT IT
+
 // connect to the db before starting the app server
 mongodb.MongoClient.connect(uri, function(err, database) {
   if (err) {console.log(err); process.exit(1);}
   
   
   toPrint += '<h1>ok, ready?</h1>';
-  toPrint += 'connecting to ?<br/>';
+  toPrint += 'connecting to '+paramURL+'<br/>';
   
   var dogs = database.collection('urls');
-  
+
   dogs.insert(dogData, function(err, results) {
     if (err) throw err;
     dogs.find({name : 'harley'}, function(err, docs) {
@@ -56,25 +63,10 @@ mongodb.MongoClient.connect(uri, function(err, database) {
       
     });
   });
-  
+
   // save db obj from callback for reuse
  //  db = database;
   console.log('database connection ready');
-});
-
-var user = {
-  "user" : process.env.M_LAB_USERNAME,
-  "pwd" : process.env.M_LAB_PASSWORD,
-  "roles" : [
-      {
-          "role" : "userAdminAnyDatabase",
-          "db" : "url-shortener"
-      }
-  ]
-};
-
-app.get('/:url', function(req, res) {
-  res.send(toPrint+req.params.url);
 });
 
 
