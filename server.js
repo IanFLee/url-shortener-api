@@ -48,7 +48,7 @@ mongodb.MongoClient.connect(uri, function(err, database) {
   if (err) {console.log(err); process.exit(1);}
   
   var urls = database.collection('urls');
-
+console.log(shortURLObj);
   urls.insert(shortURLObj, function(err, results) {
     if (err) throw err;
     database.close(function (err) {
