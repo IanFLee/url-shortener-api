@@ -47,9 +47,13 @@ mongodb.MongoClient.connect(uri, function(err, database) {
       docs.forEach(function (doc) {
         toPrint += "let's add "+doc['name']+"<br/>";
       });
-      database.close(function (err) {
+      dogs.drop(function (err) {
         if (err) throw err;
+        database.close(function (err) {
+          if (err) throw err;
+        });
       });
+      
     });
   });
   
