@@ -44,7 +44,7 @@ app.get('/new/:url', function(req, res) {
   res.send(toPrint);
 });
 
-app.get('/*', function(req, res) {
+app.get('/:*', function(req, res) {
   if (req.params.length) {
     res.send('you entered '+req.params.length);
   } else {
