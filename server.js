@@ -50,9 +50,11 @@ app.get('/new/:url', function(req, res) {
 
 app.get('/:short', function(req, res) {
   var urls = db.collection('urls');
-  var doc = urls.find({ short : req.params.short });
-  console.log(doc);
-  res.send('you entered '+urls.find({ short : req.params.short }).input);
+  urls.find({ short : req.params.short }, { input : 1 }).toArray(function (err, result) {
+    console.log(result);
+    var short = result[0].input;
+    res.status(301).redirect(short)
+  });
 });
 
 app.use(express.static("public"));
