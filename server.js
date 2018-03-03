@@ -13,6 +13,10 @@ var paramURL, db;
 var uri = process.env.URL;
 var toPrint = '';
 
+app.get('/', function(req, res) {
+  res.send('welcome home');
+});
+
 app.get('/new/:url', function(req, res) {
   paramURL = req.params.url;
   toPrint += '<h1>ok, ready?</h1>';
@@ -44,12 +48,8 @@ app.get('/new/:url', function(req, res) {
   res.send(toPrint);
 });
 
-app.get('/:*', function(req, res) {
-  if (req.params.length) {
-    res.send('you entered '+req.params.length);
-  } else {
-    res.send('welcome home');
-  }
+app.get('/:short', function(req, res) {
+  res.send('you entered '+req.params.short);
 });
 
 app.use(express.static("public"));
