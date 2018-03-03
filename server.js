@@ -38,7 +38,7 @@ app.get('/new/https://:url', function(req, res) {
     input : paramURL,
     short : getShortRandom()
   };
-  toPrint += '<h3>input: '+shortURLObj.input+'<br/>'+'short: '+shortURLObj.short+'</h3>';
+  toPrint += '<h3>input: '+shortURLObj.input+'<br/>'+'short: <a href="asparism-url-shortener-microservice.glitch.me/'+shortURLObj.short+'">asparism-url-shortener-microservice.glitch.me/'+shortURLObj.short+'</a></h3>';
   
   urls.insert(shortURLObj, function(err, results) {
     if (err) throw err;
@@ -54,11 +54,10 @@ app.get('/new/https://:url', function(req, res) {
 
 app.get('/:short', function(req, res, next) {
   var urls = db.collection('urls');
-  urls.find({ short : req.params.short }, { input : 1 }).toArray(function (err, result) {
-    console.log(result);
-    var short = result[0].input;
-    res.status(301).redirect('https://'+short);
-    next();
+  urls.find({ short : req.params.short }, { id : 0, input : 1 }).toArray(function (err, result) {
+    var originalURL = result[0].input;
+    res.redirect('https://'+originalURL);
+    ret
   });
 });
 
