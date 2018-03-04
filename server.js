@@ -53,6 +53,9 @@ app.get('/new/https://:url', function(req, res) {
   res.send(toPrint);
 });
 
+// ENTER URL AND TRY TO PRESS THE HYPERLINK
+// 
+
 app.get('/:short', function(req, res, next) {
   var urls = db.collection('urls');
   console.log('searched for '+req.params.short);
