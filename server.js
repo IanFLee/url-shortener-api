@@ -55,7 +55,9 @@ app.get('/new/https://:url', function(req, res) {
 
 app.get('/:short', function(req, res, next) {
   var urls = db.collection('urls');
+  console.log('searched for '+req.params.short);
   urls.find({ short : req.params.short }, { input : 1 }).toArray(function (err, result) {
+    console.log('found '+result[0].input);
     var originalURL = result[0].input;
     console.log('getting ready to redirect to :'+originalURL);
     //res.redirect(301, 'https://'+originalURL);
