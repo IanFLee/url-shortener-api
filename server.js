@@ -38,7 +38,7 @@ app.get('/new/https://:url', function(req, res) {
     input : paramURL,
     short : getShortRandom()
   };
-  toPrint += '<h3>input: '+shortURLObj.input+'<br/>'+'short: <a href="https://asparism-url-shortener-microservice.glitch.me/'+shortURLObj.short+'">asparism-url-shortener-microservice.glitch.me/'+shortURLObj.short+'</a></h3>';
+  toPrint += '<h3>input: '+shortURLObj.input+'<br/>'+'short: <a target="_blank" href="https://asparism-url-shortener-microservice.glitch.me/'+shortURLObj.short+'">asparism-url-shortener-microservice.glitch.me/'+shortURLObj.short+'</a></h3>';
   
   urls.insert(shortURLObj, function(err, results) {
     if (err) throw err;
@@ -64,7 +64,7 @@ app.get('/:short', function(req, res, next) {
     var originalURL = result[0].input;
     console.log('getting ready to redirect to :'+originalURL);
     //res.redirect(301, 'https://'+originalURL);
-    res.redirect('https://google.com');
+    res.redirect('https://bing.com');
     db.close(function (err) {
       if (err) throw err;
     });
