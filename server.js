@@ -25,8 +25,8 @@ app.get('/new/https://:url', function(req, res) {
   paramURL = req.params.url;
   toPrint += '<h1>ok, ready?</h1>';
   toPrint += 'connecting to '+paramURL+'<br/>';
-  console.log(db);
-  var urls = db.collection('urls');
+  
+  var urls = db.db('urls');
   console.log('user entered '+paramURL);
   function getShortRandom() {
     var full = "";
@@ -90,7 +90,7 @@ mongodb.MongoClient.connect(uri, function(err, database) {
   if (err) {console.log(err); process.exit(1);}
 
   // save db obj from callback for reuse
- db = database;
+  db = database;
   console.log('database connection ready ');
 });
 
