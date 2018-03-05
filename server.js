@@ -60,7 +60,8 @@ app.get('/new/https://:url', function(req, res) {
 app.get('/:short', function(req, res, next) {
   var urls = db.collection('urls');
   console.log('searched for '+req.params.short);
-  urls.find({ short : req.params.short }, { input : 1 }).toArray(function (err, result) {
+  /*
+  urls.find({ short : req.params.short }, { input : 1 }, (function (err, result) {
     if (err) throw err;
     console.log('found '+result[0].input);
     var originalURL = result[0].input;
@@ -70,7 +71,10 @@ app.get('/:short', function(req, res, next) {
     db.close(function (err) {
       if (err) throw err;
     });
-  });
+  }));
+  */
+  var short = urls.findOne( { short : req.params.short }, { input : 1} );
+  console.log(short);
 });
 
 app.use(express.static("public"));
