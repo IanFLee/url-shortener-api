@@ -1,36 +1,24 @@
-/*
-TODO:
-make json response hyperlink if possible
-*/
-
 'use strict';
 
-
 const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
 const mongodb = require('mongodb');
-var ObjectID = mongodb.ObjectID;
 
 var app = express();
 
 var paramURL, db;
 var uri = process.env.URL;
-var toPrint = '';
 
 app.get('/', function(req, res) {
-  res.send('welcome home');
+  res.send('<h2>welcome home</h2><br/>Get a shortened url by pointing your browser in this format:<br/>asparism-url-shortener-microservice.glitch.me<h4>/new/https');
 });
 
 app.get('/new/:incorrect', function(req, res) {
-  res.send('incorrect url format. prefix with https://');
+  res.send({error: 'Incorrect input. Make sure to follow format: https://website.com'});
 });
 
 app.get('/new/https://:url', function(req, res) {
   paramURL = req.params.url;
-  toPrint += '<h1>ok, ready?</h1>';
-  toPrint += 'connecting to '+paramURL+'<br/>';
-  
+
   var urls = db.collection('urls');
   console.log('user entered '+paramURL);
   function getShortRandom() {
@@ -44,25 +32,16 @@ app.get('/new/https://:url', function(req, res) {
     input : paramURL,
     short : getShortRandom()
   };
-  toPrint += '<h3>input: '+shortURLObj.input+'<br/>'+'short: https://asparism-url-shortener-microservice.glitch.me/'+shortURLObj.short+'</h3>';
-  toPrint += shortURLObj;
-  
+
   urls.insert(shortURLObj, function(err, results) {
     if (err) throw err;
     // DROP ALL TEST DATA WHEN YOU'RE FINISHED 
     // urls.drop something somethign
     console.log('inserted '+shortURLObj.short);
-    db.close(function (err) {
-      if (err) throw err;
-      console.log('db closed');
-    });
   });
   
-  res.send(toPrint);
+  res.send(shortURLObj);
 });
-
-// ENTER URL AND TRY TO PRESS THE HYPERLINK
-// 
 
 app.get('/:short', function(req, res, next) {
   var urls = db.collection('urls');
