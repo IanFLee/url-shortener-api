@@ -26,7 +26,7 @@ app.get('/new/https://:url', function(req, res) {
   toPrint += '<h1>ok, ready?</h1>';
   toPrint += 'connecting to '+paramURL+'<br/>';
   
-  var urls = db.db('urls');
+  var urls = db.collection('urls');
   console.log('user entered '+paramURL);
   function getShortRandom() {
     var full = "";
