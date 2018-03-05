@@ -25,6 +25,7 @@ app.get('/new/https://:url', function(req, res) {
   paramURL = req.params.url;
   toPrint += '<h1>ok, ready?</h1>';
   toPrint += 'connecting to '+paramURL+'<br/>';
+  console.log(db);
   var urls = db.collection('urls');
   console.log('user entered '+paramURL);
   function getShortRandom() {
