@@ -67,7 +67,7 @@ app.get('/:short', function(req, res, next) {
     var originalURL = result[0].input;
     console.log('getting ready to redirect to :'+originalURL);
     //res.redirect(301, 'https://'+originalURL);
-    res.redirect('https://bing.com');
+    res.redirect('https://'+originalURL);
     db.close(function (err) {
       if (err) throw err;
       console.log('db closed');
