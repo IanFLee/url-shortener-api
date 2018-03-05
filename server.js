@@ -1,3 +1,8 @@
+/*
+TODO:
+make json response hyperlink if possible
+*/
+
 'use strict';
 
 
@@ -39,7 +44,8 @@ app.get('/new/https://:url', function(req, res) {
     input : paramURL,
     short : getShortRandom()
   };
-  toPrint += '<h3>input: '+shortURLObj.input+'<br/>'+'short: <a href="https://asparism-url-shortener-microservice.glitch.me/'+shortURLObj.short+'">asparism-url-shortener-microservice.glitch.me/'+shortURLObj.short+'</a></h3>';
+  toPrint += '<h3>input: '+shortURLObj.input+'<br/>'+'short: https://asparism-url-shortener-microservice.glitch.me/'+shortURLObj.short+'</h3>';
+  toPrint += shortURLObj;
   
   urls.insert(shortURLObj, function(err, results) {
     if (err) throw err;
